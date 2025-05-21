@@ -1,0 +1,9 @@
+[
+  {
+    "question": "Co to jest zmienna w programowaniu?",
+    "difficulty": "very_easy"
+  },
+  { "question": "Opisz zasadę działania protokołu HTTP", "difficulty": "easy" },
+  { "question": "Co to jest rekurencja?", "difficulty": "medium" },
+  { "question": "Wytłumacz działanie algorytmu Dijkstry", "difficulty": "hard" }
+]

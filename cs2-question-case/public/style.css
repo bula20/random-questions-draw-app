@@ -1,0 +1,46 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #111;
+  color: #fff;
+}
+
+.case-container {
+  width: 80%;
+  margin: 20px auto;
+  overflow: hidden;
+  border: 2px solid #555;
+  height: 60px;
+  background: #222;
+  position: relative;
+}
+
+.reel {
+  display: flex;
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+.question {
+  width: 200px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+  background: #333;
+  border-radius: 6px;
+}
+
+.hard {
+  background: #a00;
+}
+.medium {
+  background: #e67e22;
+}
+.easy {
+  background: #f1c40f;
+}
+.very_easy {
+  background: #2ecc71;
+}
