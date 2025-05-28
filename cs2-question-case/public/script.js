@@ -1,50 +1,100 @@
-document.getElementById("openBtn").addEventListener("click", async () => {
-  const reel = document.getElementById("reel");
-  reel.innerHTML = "";
+async function startDraw() {
+  const openBtn = document.getElementById("openBtn");
+  if (openBtn.disabled) return; // blokada podczas animacji
 
-  // Pobierz pytanie, które ma się zatrzymać na środku
+  openBtn.disabled = true;
+
+  const reel = document.getElementById("reel");
+  const resultDiv = document.getElementById("result");
+
+  // Reset planszy i wyniku
+  reel.innerHTML = "";
+  resultDiv.innerHTML = "";
+
+  // Pobierz pytanie z serwera
   const res = await fetch("/draw");
   const winningQuestion = await res.json();
 
-  const questionWidth = 210; // 200px + 2*margin (5px)
-  const visibleSlots = 5;
-  const totalItems = 50; // Dużo, żeby animacja miała sens
-
+  const questionWidth = 210;
+  const totalItems = 50;
   const questions = [];
-
-  // Uzupełnij losowymi pytaniami
   const difficulties = ["hard", "medium", "easy", "very_easy"];
+
+  // Generuj kafelki z losowymi pytaniami (???)
   for (let i = 0; i < totalItems; i++) {
-    const randomDiv = document.createElement("div");
+    const div = document.createElement("div");
     const diff = difficulties[Math.floor(Math.random() * difficulties.length)];
-    randomDiv.classList.add("question", diff);
-    randomDiv.textContent = "???";
-    questions.push(randomDiv);
+    div.classList.add("question", diff);
+    div.textContent = "???";
+    questions.push(div);
   }
 
-  // Wstaw zwycięską kafelkę na środek widocznej części
+  // Wstaw w środek wylosowane pytanie
   const winningIndex = Math.floor(totalItems / 2);
   const winningDiv = document.createElement("div");
   winningDiv.classList.add("question", winningQuestion.difficulty);
   winningDiv.textContent = winningQuestion.question;
   questions[winningIndex] = winningDiv;
 
-  // Dodaj wszystkie kafelki do rolki
+  // Dodaj kafelki do reel
   questions.forEach((q) => reel.appendChild(q));
 
-  // Oblicz przesunięcie tak, by winningIndex trafił na środek kontenera
   const container = document.querySelector(".case-container");
   const containerCenter = container.offsetWidth / 2;
   const targetOffset = winningIndex * questionWidth + questionWidth / 2;
   const translateX = targetOffset - containerCenter;
 
-  // Animacja przesuwania
-  reel.style.transition = "transform 4s cubic-bezier(0.25, 1, 0.5, 1)";
+  const animationDuration = 4000;
+
+  // Resetuj transformację
+  reel.style.transition = "none";
+  reel.style.transform = "translateX(0px)";
+  void reel.offsetWidth; // force reflow
+
+  // Start animacji przesuwu
+  reel.style.transition = `transform ${animationDuration}ms cubic-bezier(0.25, 1, 0.5, 1)`;
   reel.style.transform = `translateX(-${translateX}px)`;
 
-  // Wyświetl wynik po zakończeniu animacji
+  // Po zakończeniu animacji:
   setTimeout(() => {
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = `<h2>${winningQuestion.question}</h2><p>Trudność: ${winningQuestion.difficulty}</p>`;
-  }, 4000);
+    // Animacja flash na wygranej kafelce
+    const winningTile = reel.children[winningIndex];
+    winningTile.classList.add("flash");
+
+    // Pokaż modal z pytaniem
+    document.getElementById("modalQuestion").textContent =
+      winningQuestion.question;
+    document.getElementById(
+      "modalDifficulty"
+    ).textContent = `Trudność: ${winningQuestion.difficulty}`;
+    document.getElementById("modal").classList.remove("hidden");
+
+    // Odblokuj przycisk
+    openBtn.disabled = false;
+  }, animationDuration);
+}
+
+// Obsługa kliknięcia przycisku
+document.getElementById("openBtn").addEventListener("click", startDraw);
+
+// Obsługa klawisza spacji
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") {
+    e.preventDefault();
+
+    const modal = document.getElementById("modal");
+
+    if (!modal.classList.contains("hidden")) {
+      // Jeśli modal jest otwarty, zamknij go
+      modal.classList.add("hidden");
+    } else {
+      // Jeśli modal jest zamknięty, rozpocznij losowanie
+      startDraw();
+    }
+  }
+});
+
+// Obsługa zamykania modala przez kliknięcie w ×
+document.getElementById("closeModal").addEventListener("click", () => {
+  document.getElementById("modal").classList.add("hidden");
 });

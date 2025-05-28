@@ -44,3 +44,122 @@ body {
 .very_easy {
   background: #2ecc71;
 }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: black;
+  padding: 2rem;
+  border-radius: 8px;
+  min-width: 300px;
+  text-align: center;
+  box-shadow: 0 0 20px #000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal .close {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.flash {
+  animation: flashAnim 1s ease-in-out;
+}
+
+@keyframes flashAnim {
+  0% {
+    box-shadow: 0 0 10px 5px yellow;
+  }
+  50% {
+    box-shadow: 0 0 30px 10px orange;
+  }
+  100% {
+    box-shadow: 0 0 10px 5px yellow;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: black;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 400px;
+  animation: fadeIn 0.5s ease;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+@keyframes flash {
+  0%,
+  100% {
+    background-color: yellow;
+  }
+  50% {
+    background-color: orange;
+  }
+}
+
+.flash {
+  animation: flash 0.5s ease-in-out 4; /* miganie 4 razy */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
